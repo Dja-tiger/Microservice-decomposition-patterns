@@ -7,6 +7,7 @@
 - `part-b-chat-extraction/` — промежуточная работа по вынесению функциональности чата.
 - `services/` — минимальные реализации сервисов **identity**, **auth**, **chat**, **notification** (Node.js + Express).
 - `gateway/` — API Gateway, проксирующий публичные запросы к сервисам.
+- `homework_file/` – материалы по домашнему заданию
 - `docker-compose.yml` — оркестрация для локального подъёма всех сервисов.
 
 ## Быстрый старт (docker-compose)
@@ -14,7 +15,7 @@
 1. Соберите и запустите стек:
 
    ```bash
-   docker-compose up --build
+   docker compose up --build
    ```
 
 2. Зарегистрируйте пользователя и получите токен:
