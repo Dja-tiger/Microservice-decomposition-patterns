@@ -1,0 +1,44 @@
+version: "3.9"
+
+services:
+  identity-service:
+    build: ./services/identity-service
+    container_name: identity-service
+    ports:
+      - "8001:8001"
+
+  auth-service:
+    build: ./services/auth-service
+    container_name: auth-service
+    ports:
+      - "8002:8002"
+
+  chat-service:
+    build: ./services/chat-service
+    container_name: chat-service
+    environment:
+      - NOTIFICATION_BASE_URL=http://notification-service:8004
+    ports:
+      - "8003:8003"
+    depends_on:
+      - notification-service
+
+  notification-service:
+    build: ./services/notification-service
+    container_name: notification-service
+    ports:
+      - "8004:8004"
+
+  api-gateway:
+    build: ./gateway
+    container_name: api-gateway
+    environment:
+      - IDENTITY_BASE_URL=http://identity-service:8001
+      - AUTH_BASE_URL=http://auth-service:8002
+      - CHAT_BASE_URL=http://chat-service:8003
+    ports:
+      - "8000:8000"
+    depends_on:
+      - identity-service
+      - auth-service
+      - chat-service
