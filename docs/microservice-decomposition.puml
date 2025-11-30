@@ -1,0 +1,34 @@
+@startuml
+skinparam handwritten false
+skinparam rectangle<<svc>> {
+  BackgroundColor #EEF5FF
+  BorderColor #6B7A99
+}
+skinparam queue {
+  BackgroundColor #FFF5E6
+  BorderColor #D28C45
+}
+
+actor Client
+rectangle "API Gateway\n(monolith facade)" <<svc>> as GW
+rectangle "Identity Service" <<svc>> as ID
+rectangle "Auth Service" <<svc>> as AUTH
+rectangle "Chat Service" <<svc>> as CHAT
+rectangle "Notification Service" <<svc>> as NOTIF
+queue "Event Bus" as BUS
+rectangle "Observability" <<svc>> as OBS
+
+Client -> GW : REST /user/register\nREST /dialog/*
+GW -> ID : create/get user
+GW -> AUTH : validate token / issue token
+GW -> CHAT : send/list messages
+AUTH --> GW : auth.validated (event)
+CHAT --> NOTIF : chat.message_created (event)
+CHAT --> OBS : message audit
+NOTIF --> OBS : delivery status
+GW --> OBS : request logs/metrics
+
+BUS -[#grey]-> NOTIF : event subscription
+BUS -[#grey]-> OBS : event fan-out
+
+@enduml
