@@ -1,0 +1,24 @@
+https://www.planttext.com/
+
+@startuml
+
+title Message send flow (legacy path)
+
+actor Client
+participant "Monolith (Facade)" as M
+participant "Chat-Service" as C
+database "Messages DB" as D
+
+Client -> M : POST /dialog/{user_id}/send\nAuthorization: Bearer ...\nx-request-id: rid-123
+activate M
+M -> M : Проверка Bearer -> userId\nЕсли нет x-request-id - сгенерировать
+M -> C : POST /dialog/{user_id}/send\nx-user-id: <userId>\nx-request-id: rid-123\nBody: {text,...}
+activate C
+C -> D : Insert message
+D --> C : ok
+C --> M : 201 Created\nx-request-id: rid-123\n{message}
+deactivate C
+M --> Client : 201 Created\nx-request-id: rid-123\n{message}
+deactivate M
+
+@enduml

@@ -1,0 +1,22 @@
+version: "3.9"
+services:
+  monolith:
+    build: ./monolith-app
+    image: hl-course/monolith-example:part-b-monolith
+    container_name: monolith-facade
+    environment:
+      - CHAT_BASE=http://chat-service:8081
+      - NODE_ENV=production
+    ports:
+      - "8080:8080"
+    depends_on:
+      - chat-service
+    restart: unless-stopped
+
+  chat-service:
+    build: ./chat-service
+    image: hl-course/chat-service-example:part-b
+    container_name: chat-service
+    expose:
+      - "8081"
+    restart: unless-stopped

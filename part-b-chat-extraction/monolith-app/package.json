@@ -1,0 +1,16 @@
+{
+  "name": "monolith-example-part-b",
+  "version": "1.1.0",
+  "description": "Monolith (facade) that proxies dialog endpoints to chat-service",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "uuid": "^9.0.1",
+    "morgan": "^1.10.0",
+    "node-fetch": "^3.3.2"
+  }
+}
